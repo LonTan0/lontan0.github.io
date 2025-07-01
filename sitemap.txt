@@ -1,2 +1,9 @@
-http://example.com/2025/07/01/hello-world/
+http://example.com/2025/07/01/alzheimer/
+http://example.com/about/index.html
+http://example.com/link/index.html
+http://example.com/categories/index.html
+http://example.com/tags/index.html
 http://example.com/
+http://example.com/tags/%E9%9D%B6%E6%9C%BA/
+http://example.com/tags/hackmyvm/
+http://example.com/categories/%E9%9D%B6%E6%9C%BA/
