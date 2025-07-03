@@ -1,7 +1,8 @@
-https://lontan0.github.io/2025/07/02/webmaster/
 https://lontan0.github.io/2025/07/02/tools/
-https://lontan0.github.io/2025/07/02/Twisted/
-https://lontan0.github.io/2025/07/01/alzheimer/
+https://lontan0.github.io/2025/07/03/hackmyvm-vulny/
+https://lontan0.github.io/2025/07/01/hackmyvm-alzheimer/
+https://lontan0.github.io/2025/07/02/hackmyvm-Twisted/
+https://lontan0.github.io/2025/07/02/hackmyvm-webmaster/
 https://lontan0.github.io/tags/index.html
 https://lontan0.github.io/categories/index.html
 https://lontan0.github.io/about/index.html
