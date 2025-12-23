@@ -1,4 +1,4 @@
-https://lontan0.github.io/2025/12/23/cve-2017-17215-%E5%8D%8E%E4%B8%BAHG532%E8%B7%AF%E7%94%B1%E5%99%A8RCE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/
+https://lontan0.github.io/2025/12/23/%E5%8D%8E%E4%B8%BA%E8%B7%AF%E7%94%B1%E5%99%A8RCE%E6%BC%8F%E6%B4%9E-CVE-2017-17215-%E5%A4%8D%E7%8E%B0/
 https://lontan0.github.io/2025/11/06/2025%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81pwn%E5%A4%8D%E7%8E%B0/
 https://lontan0.github.io/2025/10/23/hackmyvm-Darkside/
 https://lontan0.github.io/2025/10/22/2025ISCC%E7%BA%BF%E4%B8%8B/
