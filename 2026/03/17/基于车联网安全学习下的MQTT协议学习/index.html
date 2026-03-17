@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="zh-Cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于车联网安全学习下的MQTT协议学习 | LonTan0's Blog</title><meta name="author" content="LonTan0"><meta name="copyright" content="LonTan0"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MQTT 协议基础MQTT（Message Queuing Telemetry Transport）是一种运行在 TCP&#x2F;IP 之上的轻量级应用层消息传输协议，其设计初衷是为带宽受限、网络不稳定或设备资源有限的环境提供高效、可靠的通信能力。在物联网与车联网场景中，大量终端设备需要长期在线并进行低开销通信，传统以 HTTP 为代表的请求-响应模式在这种环境下存在明显局限，而 MQTT 通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于车联网安全学习下的MQTT协议学习">
+<meta property="og:url" content="https://lontan0.github.io/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="LonTan0&#39;s Blog">
+<meta property="og:description" content="MQTT 协议基础MQTT（Message Queuing Telemetry Transport）是一种运行在 TCP&#x2F;IP 之上的轻量级应用层消息传输协议，其设计初衷是为带宽受限、网络不稳定或设备资源有限的环境提供高效、可靠的通信能力。在物联网与车联网场景中，大量终端设备需要长期在线并进行低开销通信，传统以 HTTP 为代表的请求-响应模式在这种环境下存在明显局限，而 MQTT 通过">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172206491.png">
+<meta property="article:published_time" content="2026-03-17T14:02:24.000Z">
+<meta property="article:modified_time" content="2026-03-17T14:07:06.975Z">
+<meta property="article:author" content="LonTan0">
+<meta property="article:tag" content="车联网安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172206491.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "基于车联网安全学习下的MQTT协议学习",
+  "url": "https://lontan0.github.io/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/",
+  "image": "https://raw.githubusercontent.com/LonTan0/picgo/main/202603172206491.png",
+  "datePublished": "2026-03-17T14:02:24.000Z",
+  "dateModified": "2026-03-17T14:07:06.975Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "LonTan0",
+      "url": "https://github.com/LonTan0"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/tx.jpg"><link rel="canonical" href="https://lontan0.github.io/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于车联网安全学习下的MQTT协议学习',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="LonTan0's Blog" type="application/atom+xml">
+</head><body><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LonTan0/picgo/main/20250701232115119.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/LonTan0/picgo/main/202603172206491.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">LonTan0's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">基于车联网安全学习下的MQTT协议学习</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">基于车联网安全学习下的MQTT协议学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-03-17T14:02:24.000Z" title="Created 2026-03-17 22:02:24">2026-03-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-03-17T14:07:06.975Z" title="Updated 2026-03-17 22:07:06">2026-03-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BD%A6%E8%BE%86%E7%BD%91%E5%AE%89%E5%85%A8/">车辆网安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>9mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="MQTT-协议基础"><a href="#MQTT-协议基础" class="headerlink" title="MQTT 协议基础"></a>MQTT 协议基础</h2><p>MQTT（Message Queuing Telemetry Transport）是一种运行在 TCP&#x2F;IP 之上的轻量级应用层消息传输协议，其设计初衷是为带宽受限、网络不稳定或设备资源有限的环境提供高效、可靠的通信能力。在物联网与车联网场景中，大量终端设备需要长期在线并进行低开销通信，传统以 HTTP 为代表的请求-响应模式在这种环境下存在明显局限，而 MQTT 通过引入发布&#x2F;订阅模型，在通信范式上进行了根本性调整。</p>
+<p>MQTT 的核心在于&#x3D;&#x3D;发布&#x2F;订阅（Publish&#x2F;Subscribe）&#x3D;&#x3D;模型。与传统客户端&#x2F;服务器模型不同，通信双方不再直接建立耦合关系，而是通过中间组件 Broker 进行消息中转。<br>消息的生产者称为 <code>Publisher</code>，负责将数据发布到某一类主题；<br>消息的消费者称为 <code>Subscriber</code>，通过订阅特定主题来接收数据；<br><code>Broker</code> 作为系统核心，负责接收消息、维护订阅关系并完成消息路由。<br>整个过程中，Publisher 无需感知 Subscriber 的存在，Subscriber 也无需知道消息来源，通信关系被完全解耦。</p>
+<p>这种模型与 HTTP 存在本质差异。<br>HTTP 的通信由客户端主动发起，请求与响应形成严格的一一对应关系，服务器不会主动推送数据，且协议本身是无状态的，需要依赖 Cookie 或 Session 机制维持上下文。<br>而 MQTT 通过建立长连接，使客户端在连接建立后持续在线，一旦订阅关系建立完成，后续数据由 Broker 主动推送，通信呈现出明显的异步特征。同时，MQTT 内部引入会话（Session）机制，使得 Broker 能够在一定程度上保存客户端状态，这使其在本质上更接近一个轻量级消息系统，而非单纯传输协议。</p>
+<p>在消息路由层面，MQTT 通过 Topic 实现数据分发。Topic 采用层级结构，以“&#x2F;”作为分隔符，例如 <code>vehicle/vin123/status</code>，其本质是一种语义化路径，用于描述消息类别而非资源位置。Broker 通过维护 Topic 与订阅者之间的映射关系，在消息到达时进行匹配与转发。为了提升灵活性，MQTT 支持通配符机制，其中<code>“+”</code>用于匹配单层路径，<code>“#”</code>用于匹配多层路径，使订阅行为具备批量匹配能力。</p>
+<p>在传输可靠性方面，MQTT 引入 QoS（Quality of Service）机制以适应不同业务需求。QoS 0 提供最低开销的传输方式，消息发送后不进行确认，适用于对实时性要求高但允许丢失的数据；QoS 1 通过引入确认机制保证消息至少到达一次，但在异常情况下可能出现重复；QoS 2 通过更复杂的四阶段握手过程确保消息既不丢失也不重复，是可靠性最高但开销最大的模式。QoS 的存在体现了 MQTT 在设计上的权衡，即在带宽、延迟与可靠性之间提供可调节的平衡点。</p>
+<p>除此之外，MQTT 还提供 Retain 机制与会话机制。Retain 标志允许 Broker 保存某一 Topic 的最后一条消息，使新订阅者在订阅时即可获取当前状态；会话机制则允许 Broker 在客户端离线期间保存未完成的消息或订阅关系，从而实现断线重连后的状态恢复。这些机制共同构成了 MQTT 的核心能力，使其不仅具备消息传输功能，同时具备一定程度的状态管理能力。</p>
+<h2 id="MQTT-在车联网（IoV）中的应用"><a href="#MQTT-在车联网（IoV）中的应用" class="headerlink" title="MQTT 在车联网（IoV）中的应用"></a>MQTT 在车联网（IoV）中的应用</h2><p>在车联网场景中，MQTT 通常作为车辆与云平台之间的核心通信协议，承担着指令下发与状态上报的关键职责。一个典型的车联网系统由车载终端（T-Box）、云平台（TSP）以及移动端应用组成，其中 MQTT Broker 部署于云平台侧，作为所有通信的中枢节点。</p>
+<p>T-Box 作为车辆端的核心通信模块，负责采集车内 CAN 总线数据并通过 MQTT 上传至云平台，同时订阅来自云端的控制指令。移动端应用则通过云平台间接与车辆交互，用户的操作请求首先被发送至后端服务，经由业务逻辑处理后，再通过 MQTT 下发至目标车辆。</p>
+<p>以远程解锁车门为例，可以构建一个完整的数据流过程。用户在移动端发起解锁操作后，请求首先到达云平台，由云端完成身份验证与权限校验。随后系统生成对应控制指令，并将其发布到与目标车辆绑定的 Topic，例如 <code>iov/vehicle/&#123;VIN&#125;/command/door/lock</code>。Broker 在接收到该消息后，根据订阅关系将其推送至对应车辆的 T-Box。车辆端在接收指令后执行相应操作，并通过另一个 Topic（如 <code>iov/vehicle/&#123;VIN&#125;/status/door/lock</code>）上报执行结果或当前状态，从而形成闭环。</p>
+<p>在这一过程中，Topic 的设计通常以车辆唯一标识（VIN）作为核心，使不同车辆之间的数据在逻辑上实现隔离。同时，指令与状态通常分离为不同的 Topic 路径，以保证通信语义清晰。MQTT 在该场景中所体现的关键能力包括：通过长连接维持设备在线状态，通过发布&#x2F;订阅模型实现系统解耦，通过推送机制保证实时性，以及通过 Topic 体系支持大规模设备管理。</p>
+<h2 id="Ubuntu-环境下的-MQTT-模拟实验"><a href="#Ubuntu-环境下的-MQTT-模拟实验" class="headerlink" title="Ubuntu 环境下的 MQTT 模拟实验"></a>Ubuntu 环境下的 MQTT 模拟实验</h2><h3 id="安装-MQTT-Broker（Mosquitto）"><a href="#安装-MQTT-Broker（Mosquitto）" class="headerlink" title="安装 MQTT Broker（Mosquitto）"></a>安装 MQTT Broker（Mosquitto）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install -y mosquitto mosquitto-clients</span><br><span class="line">启动服务</span><br><span class="line">sudo systemctl start mosquitto</span><br><span class="line">sudo systemctl enable mosquitto</span><br></pre></td></tr></table></figure>
+<h3 id="基础通信实验（Publish-Subscribe）"><a href="#基础通信实验（Publish-Subscribe）" class="headerlink" title="基础通信实验（Publish &#x2F; Subscribe）"></a>基础通信实验（Publish &#x2F; Subscribe）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mosquitto_sub -h 192.168.111.129 -p 1883 -t &quot;#&quot; -v</span><br><span class="line">mosquitto_pub -t car/speed -m 60 -q 1</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603171509266.png"><br><strong>mosquitto_pub (发布者)</strong><br>用于向特定的 Topic（主题） 发送一条消息。<br>常用参数：<br>-h: 指定 Broker 的地址（默认是 localhost）。<br>-t: 指定消息的 Topic。<br>-m: 指定要发送的 Message 内容。<br>-p: 指定端口号（默认 1883）。<br>-u &#x2F; -P: 指定用户名和密码。<br>-q: 指定服务质量等级 (QoS)，可选 0, 1, 2。<br><strong>mosquitto_sub (订阅者)</strong><br>用于订阅一个或多个 Topic，并实时打印接收到的消息。<br>常用参数：<br>-h: 指定 Broker 地址。<br>-t: 订阅的 Topic（支持通配符：+ 代表一级，# 代表多级）。<br>-v: Verbose 模式，打印消息时同时显示 Topic 名称。<br>-C: 接收到指定数量的消息后自动退出（例如 -C 1）。</p>
+<h3 id="wireshark抓包分析"><a href="#wireshark抓包分析" class="headerlink" title="wireshark抓包分析"></a>wireshark抓包分析</h3><p>在完成基本通信验证后，利用网络抓包工具（如 Wireshark）对 MQTT 流量进行分析。通过过滤 MQTT 协议数据，可以观察到完整的通信过程，包括客户端发送 CONNECT 报文、Broker 返回 CONNACK 确认、客户端发送 SUBSCRIBE 请求以及 Broker 返回 SUBACK 等步骤。在发布消息时，可以进一步观察 PUBLISH 报文结构，其中包含固定头、可变头以及 Payload 数据。<br>打开wireshark后执行一次订阅和发布的命令，筛选出来mqtt，得到下面的流量<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603171548160.png"><br>首先是订阅者与broker之间建立连接，4-9是两次往复，4和6先建立tcp连接，8，9订阅者告诉broker订阅#即所有topic的消息<br>然后是14-19，是broker与发布者之间的，建立连接之后，18传出来了topic是car&#x2F;speed的消息，然后19发布者断开<br>最后是20，把发布者传过来的，复制给订阅者</p>
+<p><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603171604762.png"><br>这是发布者在qos&#x3D;1的情况下，可以看到变化是这条消息多了id&#x3D;1以及pub ack，在broker确认后发送pub ack后，发布者才断开连接，但是这里忘记给订阅者添加qos&#x3D;1<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603171612969.png"><br>可以看到订阅者-broker，broker-发布者都有id&#x3D;1，并且后面有两个pub ack，两边都确定之后才断开。<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603171614430.png"><br>然后这个就是qos都等于2时，这个就是四次握手，订阅与发布的每一步都需要缓存和确认</p>
+<p>通过对不同 QoS 等级下的通信过程进行对比，可以发现 QoS 1 与 QoS 2 在报文交互上的差异，例如额外的确认报文与状态流转。这种差异直接反映了协议在可靠性设计上的实现方式。<br>下面是摘自先知社区一篇文章的交互流程图，连接在文末<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172050750.png"></p>
+<h2 id="MQTT-PWN-工具安装与模拟测试"><a href="#MQTT-PWN-工具安装与模拟测试" class="headerlink" title="MQTT-PWN 工具安装与模拟测试"></a>MQTT-PWN 工具安装与模拟测试</h2><h3 id="MQTT-PWN工具安装"><a href="#MQTT-PWN工具安装" class="headerlink" title="MQTT-PWN工具安装"></a>MQTT-PWN工具安装</h3><p>git项目到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/akamai-threat-research/mqtt-pwn.git</span><br></pre></td></tr></table></figure>
+<p>修改dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.6-jessie</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak &amp;&amp; echo &quot;deb http://archive.debian.org/debian/ jessie main&quot; &gt;/etc/apt/sources.list &amp;&amp; echo &quot;deb-src http://archive.debian.org/debian/ jessie main&quot; &gt;&gt;/etc/apt/sources.list &amp;&amp; echo &quot;deb http://archive.debian.org/debian-security jessie/updates main&quot; &gt;&gt;/etc/apt/sources.list &amp;&amp; echo &quot;deb-src http://archive.debian.org/debian-security jessie/updates main&quot; &gt;&gt;/etc/apt/sources.list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install software-properties-common less vim -y --force-yes</span><br><span class="line"></span><br><span class="line">ENV INSTALL_PATH /mqtt_pwn</span><br><span class="line">RUN mkdir -p $INSTALL_PATH</span><br><span class="line">WORKDIR $INSTALL_PATH</span><br><span class="line"></span><br><span class="line">COPY requirements.txt requirements.txt</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line">COPY . .</span><br></pre></td></tr></table></figure>
+<p>安装mqtt-pwn（我这里安装时，中途有两次报错但没有影响整体，如果后续使用发现问题再修改）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up --build --detach</span><br></pre></td></tr></table></figure>
+<p>最后正常启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose run cli</span><br></pre></td></tr></table></figure>
+<p>效果如下，以下均为本地测试<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172057144.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#连接broker</span><br><span class="line">connect -o 192.168.111.129 -p 1883</span><br><span class="line">#查看配置</span><br><span class="line">system_info</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172107367.png"><br>这里有发送消息前后的变化，总连接数与当前连接数量增加了一个，订阅总数也增加了一个<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172108999.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 以服务质量0运行枚举发现10秒</span><br><span class="line">discovery -t 10 -q 0</span><br><span class="line">#查看扫描结果</span><br><span class="line">scans -i 3</span><br><span class="line">进入之后</span><br><span class="line">查看主题 topics</span><br><span class="line">查看信息 messages</span><br><span class="line">进入扫描结果后退出按q</span><br><span class="line">再退出scan后输入 back scan</span><br></pre></td></tr></table></figure>
+<p>但是目前测试只有在推送消息时，添加参数-r(保存消息)才能才这里面看到主题和消息内容<br><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172155859.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>MQTT 通过发布&#x2F;订阅模型、Topic 路由机制以及 QoS 可靠性设计，构建了一套适用于物联网与车联网场景的高效通信体系。其核心优势在于通过 Broker 实现通信解耦，通过长连接与推送机制保证实时性，并通过会话与 Retain 机制提供一定程度的状态管理能力。</p>
+<p>在车联网环境中，MQTT 不仅承担数据传输功能，更成为连接车辆、云平台与用户终端的关键基础设施。对其运行机制的理解，不仅有助于掌握协议本身，也为进一步分析复杂系统中的通信行为提供了基础。</p>
+<p>从整体上看，MQTT 已经超越了传统意义上的“传输协议”，更接近一种轻量级消息分发体系，这也是其在现代物联网架构中被广泛采用的重要原因。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/LonTan0">LonTan0</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lontan0.github.io/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/">https://lontan0.github.io/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8/">车联网安全</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172206491.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/03/14/ICSim-CAN%E6%80%BB%E7%BA%BF%E9%80%86%E5%90%91%E4%B8%8E%E4%BC%AA%E9%80%A0%EF%BC%8C%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/" title="ICSim_CAN总线逆向与伪造，重放攻击"><img class="cover" src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603140021551.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">ICSim_CAN总线逆向与伪造，重放攻击</div></div><div class="info-2"><div class="info-item-1">can总线基础知识CAN（Controller Area Network） 是一种用于车辆内部 ECU 之间通信的串行总线协议，由 Bosch 在 1980 年代设计。 CAN总线的通信方式是全局广播，因此只要接入CAN总线的任一节点，就能轻易访问CAN总线上所有流量信息。CAN数据以明文形式传输，没有任何消息验证码、数字签名的保护。 CAN总线采用基于优先级的仲裁方式，即当有多条消息同时需要发出时，优先级高的先行发出，因此攻击者可以利用这一点，在某节点以高频发送具有高优先级的报文以阻塞其他节点的消息发出，进而导致ECUs无法正常工作。 CAN报文数据内容不包含发送方的任何信息，这使节点无法判断消息的来源是其他合法节点还是攻击者，因此外部攻击者可以伪装成任一ECU节点发送恶意消息。 CAN协议本身虽然有CRC校验对传输过程进行完整性验证，但不能防止数据被第三方恶意修改后重新注入。 完整的can数据帧结构SOF | Arbitration | Control | Data | CRC | ACK |...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/14/ICSim-CAN%E6%80%BB%E7%BA%BF%E9%80%86%E5%90%91%E4%B8%8E%E4%BC%AA%E9%80%A0%EF%BC%8C%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/" title="ICSim_CAN总线逆向与伪造，重放攻击"><img class="cover" src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603140021551.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-14</div><div class="info-item-2">ICSim_CAN总线逆向与伪造，重放攻击</div></div><div class="info-2"><div class="info-item-1">can总线基础知识CAN（Controller Area Network） 是一种用于车辆内部 ECU 之间通信的串行总线协议，由 Bosch 在 1980 年代设计。 CAN总线的通信方式是全局广播，因此只要接入CAN总线的任一节点，就能轻易访问CAN总线上所有流量信息。CAN数据以明文形式传输，没有任何消息验证码、数字签名的保护。 CAN总线采用基于优先级的仲裁方式，即当有多条消息同时需要发出时，优先级高的先行发出，因此攻击者可以利用这一点，在某节点以高频发送具有高优先级的报文以阻塞其他节点的消息发出，进而导致ECUs无法正常工作。 CAN报文数据内容不包含发送方的任何信息，这使节点无法判断消息的来源是其他合法节点还是攻击者，因此外部攻击者可以伪装成任一ECU节点发送恶意消息。 CAN协议本身虽然有CRC校验对传输过程进行完整性验证，但不能防止数据被第三方恶意修改后重新注入。 完整的can数据帧结构SOF | Arbitration | Control | Data | CRC | ACK |...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LonTan0</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/LonTan0" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:c2644752718@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MQTT-%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">MQTT 协议基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MQTT-%E5%9C%A8%E8%BD%A6%E8%81%94%E7%BD%91%EF%BC%88IoV%EF%BC%89%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">MQTT 在车联网（IoV）中的应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ubuntu-%E7%8E%AF%E5%A2%83%E4%B8%8B%E7%9A%84-MQTT-%E6%A8%A1%E6%8B%9F%E5%AE%9E%E9%AA%8C"><span class="toc-number">3.</span> <span class="toc-text">Ubuntu 环境下的 MQTT 模拟实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-MQTT-Broker%EF%BC%88Mosquitto%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">安装 MQTT Broker（Mosquitto）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%80%9A%E4%BF%A1%E5%AE%9E%E9%AA%8C%EF%BC%88Publish-Subscribe%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">基础通信实验（Publish &#x2F; Subscribe）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wireshark%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90"><span class="toc-number">3.3.</span> <span class="toc-text">wireshark抓包分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MQTT-PWN-%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85%E4%B8%8E%E6%A8%A1%E6%8B%9F%E6%B5%8B%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text">MQTT-PWN 工具安装与模拟测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MQTT-PWN%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85"><span class="toc-number">4.1.</span> <span class="toc-text">MQTT-PWN工具安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/" title="基于车联网安全学习下的MQTT协议学习"><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603172206491.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于车联网安全学习下的MQTT协议学习"/></a><div class="content"><a class="title" href="/2026/03/17/%E5%9F%BA%E4%BA%8E%E8%BD%A6%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E4%B8%8B%E7%9A%84MQTT%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0/" title="基于车联网安全学习下的MQTT协议学习">基于车联网安全学习下的MQTT协议学习</a><time datetime="2026-03-17T14:02:24.000Z" title="Created 2026-03-17 22:02:24">2026-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/14/ICSim-CAN%E6%80%BB%E7%BA%BF%E9%80%86%E5%90%91%E4%B8%8E%E4%BC%AA%E9%80%A0%EF%BC%8C%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/" title="ICSim_CAN总线逆向与伪造，重放攻击"><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202603140021551.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ICSim_CAN总线逆向与伪造，重放攻击"/></a><div class="content"><a class="title" href="/2026/03/14/ICSim-CAN%E6%80%BB%E7%BA%BF%E9%80%86%E5%90%91%E4%B8%8E%E4%BC%AA%E9%80%A0%EF%BC%8C%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/" title="ICSim_CAN总线逆向与伪造，重放攻击">ICSim_CAN总线逆向与伪造，重放攻击</a><time datetime="2026-03-13T16:18:27.000Z" title="Created 2026-03-14 00:18:27">2026-03-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/01/2025ciscn%E6%9A%A8%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%88%9D%E8%B5%9Bpwn/" title="2025ciscn暨长城杯初赛pwn&amp;minihttpd wp"><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202601010109113.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025ciscn暨长城杯初赛pwn&amp;minihttpd wp"/></a><div class="content"><a class="title" href="/2026/01/01/2025ciscn%E6%9A%A8%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%88%9D%E8%B5%9Bpwn/" title="2025ciscn暨长城杯初赛pwn&amp;minihttpd wp">2025ciscn暨长城杯初赛pwn&amp;minihttpd wp</a><time datetime="2025-12-31T17:07:13.000Z" title="Created 2026-01-01 01:07:13">2026-01-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/23/%E5%8D%8E%E4%B8%BA%E8%B7%AF%E7%94%B1%E5%99%A8RCE%E6%BC%8F%E6%B4%9E-CVE-2017-17215-%E5%A4%8D%E7%8E%B0/" title="华为路由器RCE漏洞-CVE-2017-17215-复现"><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202512231656060.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="华为路由器RCE漏洞-CVE-2017-17215-复现"/></a><div class="content"><a class="title" href="/2025/12/23/%E5%8D%8E%E4%B8%BA%E8%B7%AF%E7%94%B1%E5%99%A8RCE%E6%BC%8F%E6%B4%9E-CVE-2017-17215-%E5%A4%8D%E7%8E%B0/" title="华为路由器RCE漏洞-CVE-2017-17215-复现">华为路由器RCE漏洞-CVE-2017-17215-复现</a><time datetime="2025-12-23T08:53:53.000Z" title="Created 2025-12-23 16:53:53">2025-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/2025%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81pwn%E5%A4%8D%E7%8E%B0/" title="2025强网拟态pwn复现"><img src="https://raw.githubusercontent.com/LonTan0/picgo/main/202511061738679.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025强网拟态pwn复现"/></a><div class="content"><a class="title" href="/2025/11/06/2025%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81pwn%E5%A4%8D%E7%8E%B0/" title="2025强网拟态pwn复现">2025强网拟态pwn复现</a><time datetime="2025-11-06T09:36:03.000Z" title="Created 2025-11-06 17:36:03">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/LonTan0/picgo/main/20250701232115119.png);"><div id="footer-wrap"><div class="copyright">&copy;2025 - 2026 By LonTan0</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
